@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Dial Control Settings</title>
+    <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+    <style>
+      .custom-row {
+        margin-top: -4px;
+      }
+      .custom-row sdpi-textfield {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <sdpi-item label="">
+      PotPlayer actions are sent directly to PotPlayer in the background (no focus needed, no
+      hotkeys to configure in PotPlayer itself). Pick "Custom Command ID" or "Custom OS Hotkey" only
+      for something not in the list below.
+    </sdpi-item>
+
+    <!-- Rotate Left -->
+    <sdpi-item label="Rotate Left">
+      <sdpi-select setting="rotateLeftAction" id="rotateLeftAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown" selected>Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="rotateLeftAction" data-show-when="customCommand">
+      <sdpi-textfield setting="rotateLeftCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="rotateLeftAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="rotateLeftCustomHotkey" placeholder="e.g. ctrl+alt+shift+right"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Rotate Right -->
+    <sdpi-item label="Rotate Right">
+      <sdpi-select setting="rotateRightAction" id="rotateRightAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp" selected>Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="rotateRightAction" data-show-when="customCommand">
+      <sdpi-textfield setting="rotateRightCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="rotateRightAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="rotateRightCustomHotkey" placeholder="e.g. ctrl+alt+shift+left"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Hold + Rotate Left -->
+    <sdpi-item label="Hold + Rotate Left">
+      <sdpi-select setting="holdRotateLeftAction" id="holdRotateLeftAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5" selected>Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="holdRotateLeftAction" data-show-when="customCommand">
+      <sdpi-textfield setting="holdRotateLeftCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="holdRotateLeftAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="holdRotateLeftCustomHotkey" placeholder="e.g. ctrl+alt+shift+pageup"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Hold + Rotate Right -->
+    <sdpi-item label="Hold + Rotate Right">
+      <sdpi-select setting="holdRotateRightAction" id="holdRotateRightAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5" selected>Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="holdRotateRightAction" data-show-when="customCommand">
+      <sdpi-textfield setting="holdRotateRightCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="holdRotateRightAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="holdRotateRightCustomHotkey" placeholder="e.g. ctrl+alt+shift+pagedown"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Press -->
+    <sdpi-item label="Press">
+      <sdpi-select setting="pressAction" id="pressAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next" selected>Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="pressAction" data-show-when="customCommand">
+      <sdpi-textfield setting="pressCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="pressAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="pressCustomHotkey" placeholder="e.g. ctrl+alt+shift+pagedown"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Hold -->
+    <sdpi-item label="Hold">
+      <sdpi-select setting="holdAction" id="holdAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop" selected>Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="holdAction" data-show-when="customCommand">
+      <sdpi-textfield setting="holdCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="holdAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="holdCustomHotkey" placeholder="e.g. f13"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Double Press -->
+    <sdpi-item label="Double Press">
+      <sdpi-select setting="doublePressAction" id="doublePressAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous" selected>Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="doublePressAction" data-show-when="customCommand">
+      <sdpi-textfield setting="doublePressCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="doublePressAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="doublePressCustomHotkey" placeholder="e.g. f14"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Screen Touch -->
+    <sdpi-item label="Screen Touch">
+      <sdpi-select setting="touchAction" id="touchAction">
+        <option value="none">— None —</option>
+        <option value="playPause" selected>Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute">Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="touchAction" data-show-when="customCommand">
+      <sdpi-textfield setting="touchCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="touchAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="touchCustomHotkey" placeholder="e.g. ctrl+alt+shift+space"></sdpi-textfield>
+    </sdpi-item>
+
+    <!-- Screen Hold -->
+    <sdpi-item label="Screen Hold">
+      <sdpi-select setting="touchHoldAction" id="touchHoldAction">
+        <option value="none">— None —</option>
+        <option value="playPause">Play / Pause</option>
+        <option value="play">Play</option>
+        <option value="pause">Pause</option>
+        <option value="stop">Stop</option>
+        <option value="next">Next</option>
+        <option value="previous">Previous</option>
+        <option value="volumeUp">Volume Up</option>
+        <option value="volumeDown">Volume Down</option>
+        <option value="toggleMute" selected>Toggle Mute</option>
+        <option value="seekFwd5">Seek +5s</option>
+        <option value="seekBack5">Seek -5s</option>
+        <option value="seekFwd30">Seek +30s</option>
+        <option value="seekBack30">Seek -30s</option>
+        <option value="seekFwd60">Seek +1m</option>
+        <option value="seekBack60">Seek -1m</option>
+        <option value="seekFwd300">Seek +5m</option>
+        <option value="seekBack300">Seek -5m</option>
+        <option value="speedUp">Playback Speed Up</option>
+        <option value="speedDown">Playback Speed Down</option>
+        <option value="speedNormal">Playback Speed Normal (1x)</option>
+        <option value="toggleSubs">Toggle Subtitles</option>
+        <option value="toggleOsd">Toggle OSD</option>
+        <option value="togglePlaylist">Toggle Playlist</option>
+        <option value="toggleControl">Toggle Control Bar</option>
+        <option value="toggleFullscreen">Toggle Fullscreen</option>
+        <option value="screenshot">Screenshot / Capture</option>
+        <option value="customCommand">Custom PotPlayer Command ID…</option>
+        <option value="customHotkey">Custom OS Hotkey (legacy)…</option>
+      </sdpi-select>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="touchHoldAction" data-show-when="customCommand">
+      <sdpi-textfield setting="touchHoldCustomCommandId" type="number" placeholder="PotPlayer command ID, e.g. 10035"></sdpi-textfield>
+    </sdpi-item>
+    <sdpi-item label="" class="custom-row" data-for="touchHoldAction" data-show-when="customHotkey">
+      <sdpi-textfield setting="touchHoldCustomHotkey" placeholder="e.g. ctrl+alt+shift+m"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Hold threshold (ms)">
+      <sdpi-textfield setting="holdThresholdMs" type="number" placeholder="500"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Double-press window (ms)">
+      <sdpi-textfield setting="doublePressWindowMs" type="number" placeholder="300"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Show mute status">
+      <sdpi-checkbox
+        setting="showMuteStatus"
+        label="Show &quot;Muted&quot; on screen when Toggle Mute is used (best-effort; see note above)"
+        checked
+      ></sdpi-checkbox>
+    </sdpi-item>
+
+    <sdpi-item label="Volume color">
+      <sdpi-color setting="volumeColor" default="#FFFFFF"></sdpi-color>
+    </sdpi-item>
+
+    <sdpi-item label="Progress color">
+      <sdpi-color setting="progressColor" default="#FFFFFF"></sdpi-color>
+    </sdpi-item>
+
+    <script>
+      function updateVisibility(select) {
+        document.querySelectorAll(`[data-for="${select.id}"]`).forEach((row) => {
+          row.style.display = row.dataset.showWhen === select.value ? "" : "none";
+        });
+      }
+
+      document.querySelectorAll('sdpi-select[id]').forEach((select) => {
+        select.addEventListener("change", () => updateVisibility(select));
+        updateVisibility(select);
+      });
+    </script>
+  </body>
+</html>

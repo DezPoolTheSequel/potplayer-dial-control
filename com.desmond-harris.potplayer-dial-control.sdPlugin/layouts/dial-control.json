@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/layout.json",
+  "id": "com.desmond-harris.potplayer-dial-control.dial-control.layout",
+  "items": [
+    {
+      "key": "volumeText",
+      "type": "text",
+      "rect": [0, 2, 200, 22],
+      "font": { "size": 16, "weight": 600 },
+      "alignment": "center",
+      "value": "Vol --%"
+    },
+    {
+      "key": "volumeBar",
+      "type": "bar",
+      "subtype": 0,
+      "rect": [10, 27, 180, 9],
+      "border_w": 0,
+      "value": 0
+    },
+    {
+      "key": "timeText",
+      "type": "text",
+      "rect": [0, 44, 200, 20],
+      "font": { "size": 14, "weight": 500 },
+      "alignment": "center",
+      "value": "--:-- / --:--"
+    },
+    {
+      "key": "progressBar",
+      "type": "bar",
+      "subtype": 0,
+      "rect": [10, 68, 180, 12],
+      "border_w": 0,
+      "value": 0
+    }
+  ]
+}

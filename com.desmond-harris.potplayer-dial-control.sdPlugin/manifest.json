@@ -1,0 +1,66 @@
+{
+	"Name": "PotPlayer Dial Control",
+	"Version": "0.1.0.0",
+	"Author": "Desmond Harris",
+    "Actions": [
+      {
+        "Name": "Counter",
+        "UUID": "com.desmond-harris.potplayer-dial-control.increment",
+        "Icon": "imgs/actions/counter/icon",
+        "Tooltip": "Displays a count, which increments by one on press.",
+        "PropertyInspectorPath": "ui/increment-counter.html",
+        "Controllers": [
+          "Keypad"
+        ],
+        "States": [
+          {
+            "Image": "imgs/actions/counter/key",
+            "TitleAlignment": "middle"
+          }
+        ]
+      },
+      {
+        "Name": "Dial Control",
+        "UUID": "com.desmond-harris.potplayer-dial-control.dial-control",
+        "Icon": "imgs/actions/dial-control",
+        "Tooltip": "Control PotPlayer directly in the background from a single dial, with live volume and playback progress on screen",
+        "PropertyInspectorPath": "ui/dial-control.html",
+        "Controllers": ["Encoder"],
+        "Encoder": {
+          "layout": "layouts/dial-control.json",
+          "TriggerDescription": {
+            "Rotate": "Rotate left/right (hold the dial in while rotating for the alt action)",
+            "Push": "Press / hold / double-press for three different actions",
+            "Touch": "Tap or hold the screen for two more actions"
+          }
+        },
+        "States": [
+          { "Image": "imgs/actions/dial-control-key" }
+        ]
+      }
+    ],
+	"Category": "PotPlayer Dial Control",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "Control PotPlayer directly in the background from the Stream Deck dial, with live volume and playback progress on screen",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 3,
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "24",
+		"Debug": "enabled"
+	},
+	"UUID": "com.desmond-harris.potplayer-dial-control"
+}
