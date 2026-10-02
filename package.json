@@ -1,7 +1,8 @@
 {
     "scripts": {
         "build": "rollup -c",
-        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.desmond-harris.potplayer-dial-control\""
+        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.desmond-harris.potplayer-dial-control\"",
+        "pack": "node scripts/pack.mjs"
     },
     "type": "module",
     "devDependencies": {
