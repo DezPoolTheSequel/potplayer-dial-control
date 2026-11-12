@@ -50,6 +50,7 @@ let FindWindowW: KoffiFn | null = null;
 let IsWindow: KoffiFn | null = null;
 let SendMessageW: KoffiFn | null = null;
 let PostMessageW: KoffiFn | null = null;
+let GetWindowTextW: KoffiFn | null = null;
 
 function ensureBindings(): boolean {
   if (user32) return true;
@@ -65,6 +66,7 @@ function ensureBindings(): boolean {
     PostMessageW = user32.func(
       "bool PostMessageW(void *hWnd, uint32_t Msg, uintptr_t wParam, intptr_t lParam)"
     );
+    GetWindowTextW = user32.func("int GetWindowTextW(void *hWnd, _Out_ uint16_t *lpString, int nMaxCount)");
     return true;
   } catch (err) {
     console.error("[potplayer] Failed to load user32.dll bindings:", err);
@@ -149,6 +151,30 @@ export function seekTo(ms: number): void {
   const hwnd = findWindow();
   if (!hwnd || !SendMessageW) return;
   SendMessageW(hwnd, WM_USER_POT, POT.SET_CURRENT_TIME, Math.max(0, Math.round(ms)));
+}
+
+const TITLE_SUFFIX = / - PotPlayer$/i;
+const FILE_EXTENSION = /\.[a-z0-9]{2,5}$/i;
+
+/**
+ * Title of the currently open video, derived from PotPlayer's window title
+ * ("<file name> - PotPlayer"), with the suffix and file extension removed.
+ * Returns "" when nothing is open (window title is just "PotPlayer"), or
+ * null if PotPlayer isn't running.
+ */
+export function getTitle(): string | null {
+  const hwnd = findWindow();
+  if (!hwnd || !GetWindowTextW) return null;
+  try {
+    const buf = new Uint16Array(512);
+    const len = GetWindowTextW(hwnd, buf, buf.length);
+    const raw = Buffer.from(buf.buffer, 0, Math.max(0, len) * 2).toString("utf16le").trim();
+    if (!TITLE_SUFFIX.test(raw)) return "";
+    return raw.replace(TITLE_SUFFIX, "").replace(FILE_EXTENSION, "").trim();
+  } catch (err) {
+    console.error("[potplayer] GetWindowText failed:", err);
+    return null;
+  }
 }
 
 export function getPlayStatus(): PlayStatus | null {

@@ -19,7 +19,16 @@ import {
   POTPLAYER_COMMANDS,
   isPotPlayerCommandName,
 } from "../lib/potplayer-commands";
-import { getCurrentTimeMs, getTotalTimeMs, getVolume, isRunning, sendCommand } from "../lib/potplayer";
+import { getCurrentTimeMs, getTitle, getTotalTimeMs, getVolume, isRunning, sendCommand } from "../lib/potplayer";
+import {
+  SCREEN_WIDTH,
+  TITLE_GAP,
+  TITLE_PAD,
+  estimateTextWidth,
+  renderTimeBar,
+  renderTitle,
+  renderVolumeBar,
+} from "../lib/render";
 
 const GESTURES = [
   "rotateLeft",
@@ -47,6 +56,21 @@ const DEFAULT_GESTURE_ACTIONS: Record<Gesture, string> = {
 };
 
 const FEEDBACK_INTERVAL_MS = 500;
+const LAYOUT_PATH = "layouts/dial-control.json";
+
+interface ScreenState {
+  feedbackTimer: ReturnType<typeof setInterval>;
+  scrollTimer: ReturnType<typeof setInterval> | null;
+  titleText: string | null;
+  titleDim: boolean;
+  titleWidth: number;
+  scrollOffset: number;
+  scrollPauseUntil: number;
+}
+// Title marquee: 1px every 50ms (~20px/s), pausing at the start of each loop.
+const SCROLL_INTERVAL_MS = 50;
+const SCROLL_STEP_PX = 1;
+const SCROLL_PAUSE_MS = 2000;
 
 export interface DialControlSettings {
   holdThresholdMs?: number;
@@ -86,6 +110,11 @@ export class DialControl extends SingletonAction<DialControlSettings> {
   // round-trip to Stream Deck on every tick.
   private currentSettings: DialControlSettings = DEFAULT_SETTINGS;
 
+  // Screen state per visible dial, keyed by action instance id. Kept per
+  // dial (not as single fields) because page switches can fire willAppear for
+  // one instance before willDisappear for another.
+  private screens = new Map<string, ScreenState>();
+
   override async onWillAppear(ev: WillAppearEvent<DialControlSettings>): Promise<void> {
     const settings = ev.payload.settings;
     if (!settings || Object.keys(settings).length === 0) {
@@ -105,12 +134,16 @@ export class DialControl extends SingletonAction<DialControlSettings> {
     // This action only ever declares "Encoder" as a controller in the
     // manifest, so ev.action is always a dial — this narrows the type.
     if (ev.action.isDial()) {
+      // Stream Deck can keep serving a layout cached from an older plugin
+      // version (e.g. when a dial reappears after a page switch), so always
+      // re-apply the current one before drawing into it.
+      await ev.action.setFeedbackLayout(LAYOUT_PATH);
       this.startFeedbackLoop(ev.action);
     }
   }
 
-  override onWillDisappear(_ev: WillDisappearEvent<DialControlSettings>): void {
-    this.stopFeedbackLoop();
+  override onWillDisappear(ev: WillDisappearEvent<DialControlSettings>): void {
+    this.stopFeedbackLoop(ev.action.id);
   }
 
   override onDidReceiveSettings(ev: DidReceiveSettingsEvent<DialControlSettings>): void {
@@ -220,29 +253,88 @@ export class DialControl extends SingletonAction<DialControlSettings> {
   }
 
   private startFeedbackLoop(dial: DialAction<DialControlSettings>): void {
-    this.stopFeedbackLoop();
+    this.stopFeedbackLoop(dial.id);
+    const screen: ScreenState = {
+      feedbackTimer: setInterval(() => void this.updateFeedback(dial), FEEDBACK_INTERVAL_MS),
+      scrollTimer: null,
+      titleText: null,
+      titleDim: false,
+      titleWidth: 0,
+      scrollOffset: 0,
+      scrollPauseUntil: 0,
+    };
+    this.screens.set(dial.id, screen);
     void this.updateFeedback(dial);
-    this.feedbackTimer = setInterval(() => void this.updateFeedback(dial), FEEDBACK_INTERVAL_MS);
   }
 
-  private stopFeedbackLoop(): void {
-    if (this.feedbackTimer) {
-      clearInterval(this.feedbackTimer);
-      this.feedbackTimer = null;
+  private stopFeedbackLoop(id: string): void {
+    const screen = this.screens.get(id);
+    if (!screen) return;
+    clearInterval(screen.feedbackTimer);
+    if (screen.scrollTimer) clearInterval(screen.scrollTimer);
+    this.screens.delete(id);
+  }
+
+  /**
+   * Called every poll tick. Restarts the marquee only when the title changes,
+   * but always returns the current frame so a dropped update self-heals.
+   */
+  private titleFrame(
+    dial: DialAction<DialControlSettings>,
+    screen: ScreenState,
+    text: string,
+    dim: boolean
+  ): Record<string, string> {
+    if (text !== screen.titleText || dim !== screen.titleDim) {
+      screen.titleText = text;
+      screen.titleDim = dim;
+      screen.titleWidth = estimateTextWidth(text);
+      screen.scrollOffset = 0;
+      screen.scrollPauseUntil = Date.now() + SCROLL_PAUSE_MS;
+      if (screen.scrollTimer) clearInterval(screen.scrollTimer);
+      screen.scrollTimer = null;
+
+      if (screen.titleWidth > SCREEN_WIDTH - TITLE_PAD * 2) {
+        screen.scrollTimer = setInterval(() => void this.scrollTick(dial, screen), SCROLL_INTERVAL_MS);
+      }
+    }
+
+    const offset = screen.scrollTimer ? screen.scrollOffset : null;
+    return { videoTitle: renderTitle(text, screen.titleWidth, offset, dim) };
+  }
+
+  private async scrollTick(dial: DialAction<DialControlSettings>, screen: ScreenState): Promise<void> {
+    if (screen.titleText === null || Date.now() < screen.scrollPauseUntil) return;
+
+    screen.scrollOffset += SCROLL_STEP_PX;
+    const loopLength = screen.titleWidth + TITLE_GAP;
+    if (screen.scrollOffset >= loopLength) {
+      // Second copy is now exactly where the first started — snap back and pause.
+      screen.scrollOffset = 0;
+      screen.scrollPauseUntil = Date.now() + SCROLL_PAUSE_MS;
+    }
+
+    try {
+      await dial.setFeedback({
+        videoTitle: renderTitle(screen.titleText, screen.titleWidth, screen.scrollOffset, screen.titleDim),
+      });
+    } catch (err) {
+      console.error("[dial-control] Failed to scroll title:", err);
     }
   }
 
   private async updateFeedback(dial: DialAction<DialControlSettings>): Promise<void> {
+    const screen = this.screens.get(dial.id);
+    if (!screen) return; // dial isn't visible
     try {
-      const volumeColor = this.currentSettings.volumeColor || DEFAULT_SETTINGS.volumeColor;
-      const progressColor = this.currentSettings.progressColor || DEFAULT_SETTINGS.progressColor;
+      const volumeColor = this.currentSettings.volumeColor || DEFAULT_SETTINGS.volumeColor!;
+      const progressColor = this.currentSettings.progressColor || DEFAULT_SETTINGS.progressColor!;
 
       if (!isRunning()) {
         await dial.setFeedback({
-          volumeText: { value: "PotPlayer", color: volumeColor },
-          volumeBar: { value: 0, bar_fill_c: volumeColor },
-          timeText: { value: "not running", color: progressColor },
-          progressBar: { value: 0, bar_fill_c: progressColor },
+          volumeBar: renderVolumeBar(0, "PotPlayer", volumeColor),
+          ...this.titleFrame(dial, screen, "not running", true),
+          timeBar: renderTimeBar(0, "--:--", "--:--", progressColor),
         });
         return;
       }
@@ -250,16 +342,16 @@ export class DialControl extends SingletonAction<DialControlSettings> {
       const volume = getVolume() ?? 0;
       const current = getCurrentTimeMs() ?? 0;
       const total = getTotalTimeMs() ?? 0;
-      const progress = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0;
+      const progress = total > 0 ? Math.min(100, (current / total) * 100) : 0;
+      const title = getTitle() ?? "";
 
       const showMute = this.currentSettings.showMuteStatus !== false;
       const volumeText = showMute && this.mutedGuess ? "Muted" : `Vol ${volume}%`;
 
       await dial.setFeedback({
-        volumeText: { value: volumeText, color: volumeColor },
-        volumeBar: { value: volume, bar_fill_c: volumeColor },
-        timeText: { value: `${formatTime(current)} / ${formatTime(total)}`, color: progressColor },
-        progressBar: { value: progress, bar_fill_c: progressColor },
+        volumeBar: renderVolumeBar(volume, volumeText, volumeColor),
+        ...this.titleFrame(dial, screen, title || "No video open", !title),
+        timeBar: renderTimeBar(progress, formatTime(current), formatTime(total), progressColor),
       });
     } catch (err) {
       console.error("[dial-control] Failed to update feedback:", err);

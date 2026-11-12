@@ -14,8 +14,12 @@ isn't focused. **Windows only** — PotPlayer doesn't exist on other platforms.
   gestures (rotate, hold+rotate, press, hold, double-press, touch, touch-hold) — no hotkeys required.
 - A "Custom PotPlayer Command ID" option for anything not in the built-in list.
 - A "Custom OS Hotkey" fallback for the rare case you want to trigger something outside PotPlayer.
-- Live feedback on the dial's screen: current volume (or "Muted") and elapsed/total playback time,
-  each with their own progress bar and configurable color.
+- Live feedback on the dial's screen:
+  - A volume bar with the volume (or "Muted") centered inside it.
+  - The current video's title, which scrolls when it's too long to fit (read from PotPlayer's window title).
+  - A progress bar with elapsed time on the left and total time on the right, inside the bar.
+
+  Both bars have a configurable fill color, and the text is outlined so it stays readable on filled and empty bars.
 
 ## Requirements
 
